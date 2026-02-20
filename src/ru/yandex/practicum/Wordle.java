@@ -1,7 +1,6 @@
 package ru.yandex.practicum;
 import java.io.PrintWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
 /*
