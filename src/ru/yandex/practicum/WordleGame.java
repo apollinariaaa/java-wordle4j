@@ -1,27 +1,19 @@
 package ru.yandex.practicum;
+
 import java.io.PrintWriter;
-import java.util.*;
-/*
-в этом классе хранится словарь и состояние игры
-    текущий шаг
-    всё что пользователь вводил
-    правильный ответ
-
-в этом классе нужны методы, которые
-    проанализируют совпадение слова с ответом
-    предложат слово-подсказку с учётом всего, что вводил пользователь ранее
-
-не забудьте про специальные типы исключений для игровых и неигровых ошибок
- */
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class WordleGame {
+
+    public static final int MAX_ATTEMPTS = 6;
 
     private final String answer;
     private final WordleDictionary dictionary;
     private final PrintWriter log;
 
-    private int attemptsLeft = 6;
+    private int attemptsLeft = MAX_ATTEMPTS;
     private final List<String> guesses = new ArrayList<>();
     private final List<String> hints = new ArrayList<>();
 
@@ -57,17 +49,22 @@ public class WordleGame {
     private void validateFormat(String word)
             throws InvalidWordFormatException {
 
-        if (word.length() != 5) {
-            throw new InvalidWordFormatException("Слово должно состоять из 5 букв.");
+        if (word.length() != WordleDictionary.WORD_LENGTH) {
+            throw new InvalidWordFormatException(
+                    "Слово должно состоять из "
+                            + WordleDictionary.WORD_LENGTH
+                            + " букв.");
         }
 
-        if (!word.matches("[а-я]{5}")) {
+        if (!word.matches("[а-я]{" + WordleDictionary.WORD_LENGTH + "}")) {
             throw new InvalidWordFormatException("Только русские буквы.");
         }
     }
 
     public boolean isWon() {
-        return !hints.isEmpty() && hints.get(hints.size() - 1).equals("+++++");
+        return !hints.isEmpty()
+                && hints.get(hints.size() - 1)
+                .equals("+".repeat(WordleDictionary.WORD_LENGTH));
     }
 
     public boolean isGameOver() {
@@ -83,16 +80,21 @@ public class WordleGame {
     }
 
     public String suggestWord() {
+
         List<String> candidates = dictionary.getAllWords();
 
         for (int i = 0; i < guesses.size(); i++) {
+
             String guess = guesses.get(i);
             String hint = hints.get(i);
 
             List<String> filtered = new ArrayList<>();
 
             for (String candidate : candidates) {
-                if (WordleDictionary.buildHint(guess, candidate).equals(hint)) {
+                if (WordleDictionary
+                        .buildHint(guess, candidate)
+                        .equals(hint)) {
+
                     filtered.add(candidate);
                 }
             }
@@ -104,6 +106,7 @@ public class WordleGame {
             throw new RuntimeException("Нет возможных вариантов.");
         }
 
-        return candidates.get(new Random().nextInt(candidates.size()));
+        return candidates.get(
+                new Random().nextInt(candidates.size()));
     }
 }

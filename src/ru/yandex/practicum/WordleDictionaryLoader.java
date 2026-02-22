@@ -1,13 +1,14 @@
 package ru.yandex.practicum;
-
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 /*
 этот класс содержит в себе всю рутину по работе с файлами словарей и с кодировками
     ему нужны методы по загрузке списка слов из файла по имени файла
     на выходе должен быть класс WordleDictionary
  */
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+
 
 public class WordleDictionaryLoader {
 
@@ -34,13 +35,17 @@ public class WordleDictionaryLoader {
 
                 line = WordleDictionary.normalize(line);
 
-                if (line.length() == 5 && line.matches("[а-я]{5}")) {
+                if (line.length() == WordleDictionary.WORD_LENGTH
+                        && line.matches("[а-я]{"
+                        + WordleDictionary.WORD_LENGTH + "}")) {
+
                     words.add(line);
                 }
             }
 
         } catch (IOException e) {
-            throw new DictionaryLoadException("Ошибка загрузки словаря.", e);
+            throw new DictionaryLoadException(
+                    "Ошибка загрузки словаря.", e);
         }
 
         if (words.isEmpty()) {
@@ -52,4 +57,3 @@ public class WordleDictionaryLoader {
         return new WordleDictionary(words);
     }
 }
-

@@ -1,16 +1,12 @@
 package ru.yandex.practicum;
 
 import java.util.List;
-import java.util.*;
-
-/*
-этот класс содержит в себе список слов List<String>
-    его методы похожи на методы списка, но учитывают особенности игры
-    также этот класс может содержать рутинные функции по сравнению слов, букв и т.д.
- */
-
+import java.util.ArrayList;
+import java.util.Random;
 
 public class WordleDictionary {
+
+    public static final int WORD_LENGTH = 5;
 
     private final List<String> words;
     private final Random random = new Random();
@@ -39,11 +35,11 @@ public class WordleDictionary {
 
     public static String buildHint(String guess, String answer) {
 
-        char[] result = new char[5];
-        boolean[] used = new boolean[5];
+        char[] result = new char[WORD_LENGTH];
+        boolean[] used = new boolean[WORD_LENGTH];
 
         // Первый проход — "+"
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < WORD_LENGTH; i++) {
             if (guess.charAt(i) == answer.charAt(i)) {
                 result[i] = '+';
                 used[i] = true;
@@ -51,13 +47,13 @@ public class WordleDictionary {
         }
 
         // Второй проход — "^" или "-"
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < WORD_LENGTH; i++) {
 
             if (result[i] == '+') continue;
 
             boolean found = false;
 
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < WORD_LENGTH; j++) {
                 if (!used[j] && guess.charAt(i) == answer.charAt(j)) {
                     found = true;
                     used[j] = true;
